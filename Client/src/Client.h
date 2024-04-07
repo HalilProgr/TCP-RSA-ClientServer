@@ -1,7 +1,6 @@
 #pragma once
 
 #include <iostream>
-#include <string>
 #include <memory>
 #include <Poco/Net/SocketAddress.h>
 #include <Poco/Net/DatagramSocket.h>
@@ -9,34 +8,30 @@
 #include "Encryptor.h"
 
 
-class ClientHandler
+namespace Net
 {
-private:
-	std::string host;
-	int port;
 
-	Crypto::PublicKey* key;
-	Crypto::Encryptor* ecnr;
+	class ClientHandler
+	{
+	public:
+		ClientHandler(std::string h, int port);
 
-	// IP endpoint/socket address (consists of host addr and port #)
-	Poco::Net::SocketAddress socketAddr;
+		bool connected();
+		bool sendMessage();
 
-	// Interface to a TCP stream socket
-	Poco::Net::StreamSocket socket;
+	private:
+		Crypto::PublicKey deserializationPublicKey(std::string& input);
 
-	// Stream for reading from / writing to a socket (accepts a socket)
-	Poco::Net::SocketStream stream;
+		std::string _host;
+		int _port;
 
+		std::unique_ptr<Crypto::PublicKey> _key;
+		std::unique_ptr<Crypto::Encryptor> _ecnr;
 
-	Crypto::PublicKey* deserializationPublicKey(std::string& input);
+		Poco::Net::SocketAddress _socketAddr;
+		Poco::Net::StreamSocket _socket;
+	};
 
-public:
-	ClientHandler(std::string h, int port);
-	~ClientHandler();
-
-	bool connected();
-	bool sendMessage();
-};
-
-Crypto::CryptoString StringToCryptoString(std::string& input);
-std::string CryptoStringToString(Crypto::CryptoString& input);
+	Crypto::CryptoString StringToCryptoString(std::string& input);
+	std::string CryptoStringToString(Crypto::CryptoString& input);
+}

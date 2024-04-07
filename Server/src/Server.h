@@ -1,27 +1,28 @@
 #pragma once
 
-#include <iostream>
-#include <cstring>
 #include <Poco/Net/SocketAddress.h>
 #include <Poco/Net/DatagramSocket.h>
 #include <Poco/Net/TCPServerConnection.h>
 #include "RSA.h"
 
 
-class newConnection : public Poco::Net::TCPServerConnection {
+namespace Net
+{
 
-public:
-    newConnection(const Poco::Net::StreamSocket& s)
-        : Poco::Net::TCPServerConnection(s), _rsa(11, 17, 3) {}
-    ~newConnection();
+    class newConnection : public Poco::Net::TCPServerConnection {
 
-    void run() override;
+    public:
+        newConnection(const Poco::Net::StreamSocket& s)
+            : Poco::Net::TCPServerConnection(s), _rsa(11, 17, 3) {}
 
-private:
-    std::string serializationPublicKey(const Crypto::PublicKey* key);
+        void run() override;
 
-    Crypto::RSA _rsa;
-};
+    private:
+        std::string serializationPublicKey(const Crypto::PublicKey* key);
 
-Crypto::CryptoString StringToCryptoString(std::string& input);
-std::string CryptoStringToString(Crypto::CryptoString& input);
+        Crypto::RSA _rsa;
+    };
+
+    Crypto::CryptoString StringToCryptoString(std::string& input);
+    std::string CryptoStringToString(Crypto::CryptoString& input);
+}

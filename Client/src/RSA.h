@@ -1,11 +1,4 @@
-//---------------------------------------------------------
-// Main class for RSA de-/encprytion.
-//
-// Author: Sebastian Weninger
-//
-
-#ifndef RSA_
-#define RSA_
+#pragma once
 
 #include <ostream>
 #include <iostream>
@@ -168,5 +161,3 @@ namespace Crypto
     }
   };
 }
-
-#endif
